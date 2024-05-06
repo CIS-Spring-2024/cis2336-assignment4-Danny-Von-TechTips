@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>University of Houston - Dining Services</h1>
+        <nav>
+            <ul>
+                <li><a href="#beach">Beach</a></li>
+                <li><a href="#mountains">Mountains</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="topnav">
+        <a href="index.html">Home</a>
+        <a href="news.html">News</a>
+        <a href="contact.html">Contact</a>
+        <a href="about.html">About</a>
+        <a href="menu.html" class="active">Menu</a>
+    </div>
+
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="style1.css">
+    </head>
+    <body>
+    
+        <header>
+            <h1>Restaurant Menu</h1>
+        </header>
+        
+        <main>
+            <section class="menu" id="menu-section">
+                <h2>Menu</h2>
+                <div class="menu-items">
+                    <!-- Menu items will be dynamically generated here -->
+                </div>
+            </section>
+        
+            <aside class="cart" id="cart-section">
+                <h2>Cart</h2>
+                <ul id="cart-items">
+                    <!-- Cart items will be dynamically generated here -->
+                </ul>
+                <p>Total: <span id="total-cost">$0.00</span></p>
+                <button id="submit-order">Submit Order</button>
+            </aside>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 Restaurant Name. All rights reserved.</p>
+        </footer>
+        
+        <script>
+            // Sample menu data
+            const menuItems = [
+                { id: 1, name: "Spaghetti Bolognese", price: 12.99, description: "Classic Italian pasta dish with meat sauce.", image: "spaghetti.jpg" },
+                { id: 2, name: "Caesar Salad", price: 8.99, description: "Fresh romaine lettuce with Caesar dressing and croutons.", image: "salad.jpg" },
+                { id: 3, name: "Grilled Salmon", price: 16.99, description: "Fresh salmon fillet grilled to perfection.", image: "salmon.jpg" },
+                { id: 4, name: "Margherita Pizza", price: 10.99, description: "Traditional Italian pizza with tomato sauce, mozzarella, and basil.", image: "pizza.jpg" },
+                { id: 5, name: "Chicken Alfredo", price: 14.99, description: "Creamy Alfredo sauce served over grilled chicken and pasta.", image: "chicken_alfredo.jpg" },
+                { id: 6, name: "Tiramisu", price: 6.99, description: "Classic Italian dessert made with ladyfingers, espresso, mascarpone cheese, and cocoa.", image: "tiramisu.jpg" }
+            ];
+        
+            // Function to generate menu items dynamically
+            function generateMenuItems(menuItems) {
+                const menuSection = document.getElementById('menu-section');
+                const menuItemsContainer = document.createElement('div');
+                menuItemsContainer.classList.add('menu-items');
+        
+                menuItems.forEach(item => {
+                    const menuItem = document.createElement('div');
+                    menuItem.classList.add('menu-item');
+        
+                    const itemName = document.createElement('h3');
+                    itemName.textContent = item.name;
+        
+                    const itemPrice = document.createElement('p');
+                    itemPrice.textContent = `Price: $${item.price.toFixed(2)}`;
+        
+                    const itemDescription = document.createElement('p');
+                    itemDescription.textContent = item.description;
+        
+                    const foodPreview = document.createElement('div');
+                    foodPreview.classList.add('food-preview');
+                    foodPreview.innerHTML = `<img src="${item.image}" alt="${item.name}"><p>${item.description}</p>`;
+        
+                    const quantityInput = document.createElement('input');
+                    quantityInput.setAttribute('type', 'number');
+                    quantityInput.setAttribute('min', '1');
+                    quantityInput.setAttribute('value', '1');
+        
+                    const addToCartBtn = document.createElement('button');
+                    addToCartBtn.classList.add('add-to-cart');
+                    addToCartBtn.textContent = 'Add to Cart';
+                    addToCartBtn.addEventListener('click', () => addToCart(item, quantityInput.value));
+        
+                    menuItem.appendChild(itemName);
+                    menuItem.appendChild(itemPrice);
+                    menuItem.appendChild(itemDescription);
+                    menuItem.appendChild(foodPreview);
+                    menuItem.appendChild(quantityInput);
+                    menuItem.appendChild(addToCartBtn);
+        
+                    menuItemsContainer.appendChild(menuItem);
+                });
+        
+                menuSection.appendChild(menuItemsContainer);
+            }
+        
+            // Function to add item to cart
+            function addToCart(item, quantity) {
+                const cartItems = document.getElementById('cart-items');
+                const totalCostElement = document.getElementById('total-cost');
+        
+                const cartItem = document.createElement('li');
+                cartItem.classList.add('cart-item');
+                cartItem.textContent = `${item.name} x${quantity} - $${(item.price * quantity).toFixed(2)}`;
+        
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.addEventListener('click', () => {
+                    cartItems.removeChild(cartItem);
+                    // Calculate total cost after removing item
+                    let totalCost = parseFloat(totalCostElement.textContent.slice(1)); // Remove $ sign and parse as float
+                    totalCost -= item.price * quantity;
+                    totalCostElement.textContent = `$${totalCost.toFixed(2)}`;
+                });
+        
+                cartItem.appendChild(deleteBtn);
+                cartItems.appendChild(cartItem);
+        
+                // Calculate total cost
+                let totalCost = parseFloat(totalCostElement.textContent.slice(1)); // Remove $ sign and parse as float
+                totalCost += item.price * quantity;
+                totalCostElement.textContent = `$${totalCost.toFixed(2)}`;
+            }
+        
+            // Submit order functionality
+            document.getElementById('submit-order').addEventListener('click', () => {
+                const cartItems = document.getElementById('cart-items');
+                const totalCostElement = document.getElementById('total-cost');
+        
+                // Clear cart and total cost
+                cartItems.innerHTML = '';
+                totalCostElement.textContent = '$0.00';
+        
+                alert('Order submitted successfully! Thank you for your order.');
+            });
+        
+            // Call the function to generate menu items
+            generateMenuItems(menuItems);
+        </script>
+        
+        </body>
+        </html>
